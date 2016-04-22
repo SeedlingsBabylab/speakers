@@ -8,12 +8,28 @@ input_dir = ""
 output_file = ""
 
 speakers = {}
-
+speakers_table = {}
 
 def check_file_name(file):
     if file.endswith(".csv"):
         return True
     return False
+
+
+def output_speaker_table(speakers_dict, path):
+
+    key_list = [key for key in speakers_dict]
+    table = []
+    subjects = list(set([key[:2] for key in key_list]))
+    subjects.sort()
+    table.append(["visit"]+ subjects) # the header
+
+    with open(path.replace(".txt", ".csv"), "wb") as output:
+        writer = csv.writer(output)
+        writer.writerows(table)
+
+    #for key in key_list:
+
 
 if __name__ == "__main__":
 
@@ -41,5 +57,9 @@ if __name__ == "__main__":
 
     with open(output_file, "wb") as output:
         output.write(pprint.pformat(speakers, 4))
+
+
+    output_speaker_table(speakers, output_file)
+
 
     pprint.pprint(speakers)
