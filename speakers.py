@@ -24,9 +24,30 @@ def output_speaker_table(speakers_dict, path):
     subjects.sort()
     table.append(["visit"]+ subjects) # the header
 
+    #subjects = sorted(set(key[:2] for key in key_list))
+    visits = sorted(set(key[3:5] for key in key_list))
+
     with open(path.replace(".txt", ".csv"), "wb") as output:
         writer = csv.writer(output)
         writer.writerows(table)
+
+        audio_row = []
+        video_row = []
+
+        for visit in visits:
+            for subject in subjects:
+                key = "{}_{}".format(subject, visit)
+                if key in speakers_dict:
+                    audio_speakers = "/".join(speakers_dict[key]["audio"])
+                    video_speakers = "/".join(speakers_dict[key]["video"])
+                    audio_row.append(audio_speakers)
+                    video_row.append(video_speakers)
+
+            writer.writerow(["{}_audio".format(visit)] + audio_row)
+            writer.writerow(["{}_video".format(visit)] + video_row)
+            del audio_row[:]
+            del video_row[:]
+
 
     #for key in key_list:
 
