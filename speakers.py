@@ -38,10 +38,15 @@ def output_speaker_table(speakers_dict, path):
             for subject in subjects:
                 key = "{}_{}".format(subject, visit)
                 if key in speakers_dict:
-                    audio_speakers = "/".join(speakers_dict[key]["audio"])
-                    video_speakers = "/".join(speakers_dict[key]["video"])
+                    audio_speakers = [element for element in speakers_dict[key]["audio"] if element != "NA"]
+                    video_speakers = [element for element in speakers_dict[key]["video"] if element != "NA"]
+                    audio_speakers = "/".join(audio_speakers)
+                    video_speakers = "/".join(video_speakers)
                     audio_row.append(audio_speakers)
                     video_row.append(video_speakers)
+                else:
+                    audio_row.append("NA")
+                    video_row.append("NA")
 
             writer.writerow(["{}_audio".format(visit)] + audio_row)
             writer.writerow(["{}_video".format(visit)] + video_row)
